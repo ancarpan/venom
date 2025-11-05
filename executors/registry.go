@@ -14,6 +14,7 @@ import (
 	"github.com/ovh/venom/executors/mqtt"
 	"github.com/ovh/venom/executors/ovhapi"
 	"github.com/ovh/venom/executors/rabbitmq"
+	"github.com/ovh/venom/executors/radius"
 	"github.com/ovh/venom/executors/readfile"
 	"github.com/ovh/venom/executors/redis"
 	"github.com/ovh/venom/executors/smtp"
@@ -36,6 +37,7 @@ var Registry map[string]Constructor = map[string]Constructor{
 	mqtt.Name:       mqtt.New,
 	ovhapi.Name:     ovhapi.New,
 	rabbitmq.Name:   rabbitmq.New,
+	radius.Name:     radius.New,
 	readfile.Name:   readfile.New,
 	redis.Name:      redis.New,
 	smtp.Name:       smtp.New,

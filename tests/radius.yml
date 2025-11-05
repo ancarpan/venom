@@ -1,0 +1,59 @@
+name: radius
+vars:
+  radius_server: "localhost:1812"
+  radius_secret: "secret"
+  test_user: "testuser"
+  test_password: "testpass"
+
+testcases:
+- name: radius_access_request
+  steps:
+  - type: radius
+    server: "{{.radius_server}}"
+    secret: "{{.radius_secret}}"
+    code: "Access-Request"
+    timeout: 5
+    attributes:
+      User-Name: "{{.test_user}}"
+      User-Password: "{{.test_password}}"
+      NAS-IP-Address: "192.168.1.1"
+      NAS-Port: "0"
+    assertions:
+    - result.err ShouldBeEmpty
+    - result.code ShouldNotBeEmpty
+    vars:
+      radius_response_code: "{{.result.code}}"
+
+- name: radius_accounting_request
+  steps:
+  - type: radius
+    server: "{{.radius_server}}"
+    secret: "{{.radius_secret}}"
+    code: "Accounting-Request"
+    timeout: 5
+    attributes:
+      User-Name: "{{.test_user}}"
+      Acct-Status-Type: "Start"
+      Acct-Session-Id: "12345"
+      NAS-IP-Address: "192.168.1.1"
+    assertions:
+    - result.err ShouldBeEmpty
+    - result.code ShouldNotBeEmpty
+
+- name: radius_with_service_type
+  steps:
+  - type: radius
+    server: "{{.radius_server}}"
+    secret: "{{.radius_secret}}"
+    code: "Access-Request"
+    timeout: 5
+    attributes:
+      User-Name: "{{.test_user}}"
+      User-Password: "{{.test_password}}"
+      Service-Type: "Framed-User"
+      Framed-Protocol: "PPP"
+      Framed-IP-Address: "192.168.1.100"
+      NAS-IP-Address: "192.168.1.1"
+    assertions:
+    - result.err ShouldBeEmpty
+    - result.code ShouldNotBeEmpty
