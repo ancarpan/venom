@@ -4,7 +4,8 @@
 ##### ^^^^^^ make help ^^^^^^ #####
 
 TARGET_NAME 			= venom
-LDFLAGS					= -ldflags "-X github.com/ovh/venom.Version=$(if ${GIT_DESCRIBE},${GIT_DESCRIBE},snapshot)"
+BUILD_TIME				= $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
+LDFLAGS					= -ldflags "-X github.com/ovh/venom.Version=$(if ${GIT_DESCRIBE},${GIT_DESCRIBE},snapshot) -X github.com/ovh/venom.BuildTime=$(BUILD_TIME)"
 
 # If you want to enable the cross-compilation, uncomment the following line:
 ENABLE_CROSS_COMPILATION := true
