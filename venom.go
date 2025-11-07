@@ -23,7 +23,9 @@ import (
 var (
 	// Version is set with -ldflags "-X github.com/ovh/venom/venom.Version=$(VERSION)"
 	Version = "snapshot"
-	IsTest  = ""
+	// BuildTime is set with -ldflags "-X github.com/ovh/venom/venom.BuildTime=$(BUILD_TIME)"
+	BuildTime = ""
+	IsTest    = ""
 )
 
 // OSExit is a wrapper for os.Exit
