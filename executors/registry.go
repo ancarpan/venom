@@ -5,6 +5,7 @@ import (
 	"github.com/ovh/venom/executors/amqp"
 	"github.com/ovh/venom/executors/couchbase"
 	"github.com/ovh/venom/executors/dbfixtures"
+	"github.com/ovh/venom/executors/dns"
 	"github.com/ovh/venom/executors/exec"
 	"github.com/ovh/venom/executors/grpc"
 	"github.com/ovh/venom/executors/http"
@@ -29,6 +30,7 @@ type Constructor func() venom.Executor
 var Registry map[string]Constructor = map[string]Constructor{
 	amqp.Name:       amqp.New,
 	dbfixtures.Name: dbfixtures.New,
+	dns.Name:        dns.New,
 	exec.Name:       exec.New,
 	grpc.Name:       grpc.New,
 	http.Name:       http.New,

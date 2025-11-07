@@ -3,6 +3,7 @@ package radius
 import (
 	"context"
 	"fmt"
+	"net"
 	"strconv"
 	"time"
 
@@ -189,7 +190,17 @@ func addAttribute(packet *radius.Packet, name, value string) error {
 		rfc2865.UserPassword_SetString(packet, value)
 	case "NAS-IP-Address":
 		// Parse IP address and set
-		rfc2865.NASIPAddress_Set(packet, []byte(value))
+		ip := net.ParseIP(value)
+		if ip == nil {
+			return fmt.Errorf("invalid IP address: %s", value)
+		}
+		// Convert to IPv4 if it's IPv6-mapped IPv4
+		if ip4 := ip.To4(); ip4 != nil {
+			ip = ip4
+		} else if ip.To16() == nil {
+			return fmt.Errorf("invalid IPv4 address: %s", value)
+		}
+		rfc2865.NASIPAddress_Set(packet, ip)
 	case "NAS-Port":
 		if port, err := strconv.Atoi(value); err == nil {
 			rfc2865.NASPort_Set(packet, rfc2865.NASPort(port))
@@ -244,10 +255,30 @@ func addAttribute(packet *radius.Packet, name, value string) error {
 		rfc2865.FramedProtocol_Set(packet, rfc2865.FramedProtocol(protocol))
 	case "Framed-IP-Address":
 		// Parse IP address and set
-		rfc2865.FramedIPAddress_Set(packet, []byte(value))
+		ip := net.ParseIP(value)
+		if ip == nil {
+			return fmt.Errorf("invalid IP address: %s", value)
+		}
+		// Convert to IPv4 if it's IPv6-mapped IPv4
+		if ip4 := ip.To4(); ip4 != nil {
+			ip = ip4
+		} else if ip.To16() == nil {
+			return fmt.Errorf("invalid IPv4 address: %s", value)
+		}
+		rfc2865.FramedIPAddress_Set(packet, ip)
 	case "Framed-IP-Netmask":
 		// Parse IP netmask and set
-		rfc2865.FramedIPNetmask_Set(packet, []byte(value))
+		ip := net.ParseIP(value)
+		if ip == nil {
+			return fmt.Errorf("invalid IP address: %s", value)
+		}
+		// Convert to IPv4 if it's IPv6-mapped IPv4
+		if ip4 := ip.To4(); ip4 != nil {
+			ip = ip4
+		} else if ip.To16() == nil {
+			return fmt.Errorf("invalid IPv4 address: %s", value)
+		}
+		rfc2865.FramedIPNetmask_Set(packet, ip)
 	case "Framed-Routing":
 		// Map routing strings to values
 		var routing uint32
